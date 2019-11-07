@@ -7,10 +7,6 @@ import wave
 import numpy as np
 
 
-# What channel should the phone connect to?
-PHONE_VOICE_CHANNEL_NAME = 'Team Meetings'
-
-
 # Makes woooooOOOOOoooooOOOOOooooOOOOOoo sounds
 class TestAudioSource(discord.PCMAudio):
     def __init__(self, freq=440, duration_ms=20):

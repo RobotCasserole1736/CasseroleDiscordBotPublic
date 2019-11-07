@@ -1,4 +1,4 @@
-import re
+import re, random
 
 
 class CheerHandler():
@@ -7,38 +7,45 @@ class CheerHandler():
         self.message = None
         self.responsePhrase = ""
 
-    async def callResponse(self, call, response):
-        if self.message.content.strip().lower() == call.lower():
-            await self.message.channel.send(response)
+    def callResponse(self, call, response):
+        if self.message.strip().lower() == call.lower():
+            return response
+        else:
+            return ""
 
-    async def update(self, message):
+    def update(self, messageText):
 
-        if message.content.startswith('$hello'):
-            print("Responding to greeting from {}".format(message.author))
-            await message.channel.send("Hello!")
+        response = ""
+
+        if messageText.startswith('hello') or messageText.startswith('hi'):
+            response += random.choice(["Hello!", "Hello.", "Howdy!", "Good day to you!", "How's it going?", "Hi!", "Yo!", "Greetings!"])
         
         # Handle Simple call/response cheers
-        self.message = message
-        await self.callResponse("17", "36!")
-        await self.callResponse("Robot", "Casserole!")
-        await self.callResponse("Casserole Casserole", "Eat it Up! Eat it Up!")
-        await self.callResponse("What time is it?", "Nine Thirty!")
-        await self.callResponse("Four on Three", "One! Two! Three! Four!")
-        await self.callResponse("Who's Hungry?", "I'm Hungry!")
-        await self.callResponse("For What?", "Casserole!!!")
-        await self.callResponse("yay", "YAAAAAYYYYY!!!!")
-        await self.callResponse("Who's Hungary?", "The Hungarians! https://en.wikipedia.org/wiki/Hungary")
+        self.message = messageText
+        response += self.callResponse("17", "36!")
+        response += self.callResponse("Robot", "Casserole!")
+        response += self.callResponse("Casserole Casserole", "Eat it Up! Eat it Up!")
+        response += self.callResponse("What time is it?", "Nine Thirty!")
+        response += self.callResponse("Four on Three", "One! Two! Three! Four!")
+        response += self.callResponse("Who's Hungry?", "I'm Hungry!")
+        response += self.callResponse("For What?", "Casserole!!!")
+        response += self.callResponse("yay", "YAAAAAYYYYY!!!!")
+        response += self.callResponse("Who's Hungary?", "The Hungarians! https://en.wikipedia.org/wiki/Hungary")
 
         ## Handle "Give me a..." cheers
-        results = re.search("Give me a[n]? (.*)", message.content)
+        results = re.search("give me a[n]? (.*)", messageText)
         if(results):
             subphrase = results.group(1).strip()
             self.responsePhrase += subphrase
-            await self.message.channel.send(subphrase + "!")
-        if(self.message.content.startswith("What does that spell?")):
+            response += (subphrase + "!")
+
+        if(messageText.startswith("what does that spell?")):
             if(len(self.responsePhrase) > 0):
-                await self.message.channel.send(self.responsePhrase + "!")
+                response += (self.responsePhrase + "!")
                 self.responsePhrase = ""
+
+        return response
+        
 
 
         
