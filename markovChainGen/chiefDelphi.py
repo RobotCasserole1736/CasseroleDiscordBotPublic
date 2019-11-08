@@ -13,7 +13,7 @@ client = discourse.Client(
 client.session.headers = []
 
 with open("./CDmarkov.txt", "a") as f:
-    for id in range(360888,362888):
+    for id in range(357888,359888):
         print("Scraping post id={}".format(id))
         time.sleep(0.25)
         try:
