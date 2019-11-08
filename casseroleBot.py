@@ -270,7 +270,7 @@ class CasseroleDiscordBotClient(discord.Client):
                     #Call or hang up as needed
                     print("Connection request changed to {}".format(self.connectRequest))
                     if(self.connectRequest):
-                        await self.voiceConnect()
+                        await self.voiceConnectTeam()
                     else:
                         await self.hangUp()
                     self.connectRequestPrev = self.connectRequest

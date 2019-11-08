@@ -142,6 +142,5 @@ if __name__ == "__main__":
     testObj = RevolabsFLXInterface()
     testObj.setLedsMuted()
     while(True):
-        if(testObj.callBtnPressCount % 5 == 0):
-            testObj.setLedsMuted()
-        time.sleep(1.0)
+        testObj._printState()
+        time.sleep(0.25)
