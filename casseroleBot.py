@@ -166,20 +166,33 @@ class CasseroleDiscordBotClient(discord.Client):
         if message.author == self.user:
             return
 
-        # Ensure bot was mentioned in the message
-        botIsMentioend = False
+        # check bot was mentioned in the message
+        processText = False
         for user in  message.mentions:
             if(self.user.id == user.id):
-                botIsMentioend = True
+                processText = True
                 break
 
-        # Strip out the mention token from the message prior to parsing
         messageText = message.content.lower().strip()
-        messageText = re.sub(r'\<\@[0-9]+\>', ' ', messageText)
+
+        if(processText):
+            # Strip out the mention token from the message prior to parsing
+            messageText = message.content.lower().strip()
+            messageText = re.sub(r'\<\@[0-9]+\>', ' ', messageText)
+            
         messageText = messageText.strip()
 
+        # Also respond if the message starts with a dollar sign
+        if(messageText.startswith("$")):
+            processText = True
+            messageText = messageText[1:]
+            messageText = messageText.strip()
+
+        # Chime in on cheering for things
+        if("yay" in messageText):
+            processText = True
         
-        if(botIsMentioend):
+        if(processText):
 
             response = ""
             reboot_requested = False

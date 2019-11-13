@@ -7,6 +7,8 @@ Type=simple
 WorkingDirectory=/home/pi/casserolebot/CasseroleDiscordBot
 ExecStart=/usr/bin/python3 /home/pi/casserolebot/CasseroleDiscordBot/casseroleBot.py
 User=pi
+Restart=on-failure
+RestartSec=5s
 
 [Install]
 WantedBy=multi-user.target
