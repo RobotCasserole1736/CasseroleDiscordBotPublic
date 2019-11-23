@@ -15,14 +15,14 @@ class FuzzyResponseParser():
     callinCommandTeam = ["Call in to team voice channel", "Start team voice call", "Call team", "Call in", "Team call", "callin", "callinTeam", "Call the team"]
     holdCommands = ["Hold", "silence the line", "Apply the cone of silence"]
     hangUpCommands = ["Hang Up", "hangup", "say goodbye", "end call"]
-    helpCommands = ["Help", "What do I do", "How do I"]
+    helpCommands = ["Help", "What do I do", "How do I", "What can you do"]
     rebootCommands = ["Restart", "reboot", "turn on and off again"]
     greetings = ["hello", "hi", "how are you", "how ya doin", "greetings", "salutations"]
 
 
     CALLIN_MENTORS_REQUESTED = 1
     CALLIN_TEAM_REQUESTED    = 2
-    HOLD_REQUESTED           = 2
+    HOLD_REQUESTED           = 3
     HANG_UP_REQUESTED        = 4
     HELP_REQUESTED           = 5
     REBOOT_REQUESTED         = 6
@@ -55,14 +55,19 @@ class FuzzyResponseParser():
 
     def getBestFuzzyMatchScore(self, inputString, testStrings):
         maxScore = 0
-        inputString = inputString.lower()
+        inputString = inputString.lower().strip()
         for string in testStrings:
-            string = string.lower()
-            score = 100
-            score *= fuzz.partial_ratio(inputString, string)/100
-            score *= fuzz.token_sort_ratio(inputString, string)/100
-            score *= fuzz.token_set_ratio(inputString, string)/100
-            maxScore = max(score, maxScore)
+            string = string.lower().strip()
+            if(string == inputString):
+                #If we match exactly, return 100.
+                return 100
+            else:
+                #Otherwise, do a heuristic match
+                score = 100
+                score *= fuzz.partial_ratio(inputString, string)/100
+                score *= fuzz.token_sort_ratio(inputString, string)/100
+                score *= fuzz.token_set_ratio(inputString, string)/100
+                maxScore = max(score, maxScore)
         return maxScore
 
     def fuzzyParse(self, inputString):
@@ -77,7 +82,7 @@ class FuzzyResponseParser():
             bestGuess = None
             msg = "FuzzyParse: Unknown input string"
         else:
-            msg = "FuzzyParse: Resolved input string to {} with {}%% certanty".format(self.niceNameMatchDict[bestGuess], bestPct)
+            msg = "FuzzyParse: Resolved input string to {} with {}% certanty".format(self.niceNameMatchDict[bestGuess], bestPct)
 
         print(msg)
         return(bestGuess)

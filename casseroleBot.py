@@ -20,20 +20,21 @@ import APIKeys
 
 
 helpStr = " Hi {}! I'm the Casserole Discord Bot! \n" \
-          " Be sure to @ mention me if you want to talk. \n" \
+          " Be sure to @ mention me if you want to talk, or start your message with a `$`. \n" \
           " I know a few cheers which I'll respond to. \n" \
-          " I also function as a conference phone (still WIP). \n\n" \
-          " The phone is controlled with the following commands: \n" \
-          "   `callin` - Causes me to call into the Team Meetings channel \n" \
-          "   `callinmentor` - Causes me to call into the Mentor Meetings channel \n" \
-          "   `hangup` - Causes me to leave the Team Meetings channel \n" \
-          "   `hold`   - Toggles whether I broadcast the microphone, or some spiffy on-hold music. \n\n" \
+          " I also function as a conference phone. Mostly \n\n" \
+          " The phone is controlled when you ask me to do the following: \n" \
+          "   `Call in Team` - Causes me to call into the Team Meetings channel \n" \
+          "   `Call in Mentors` - Causes me to call into the Mentor Meetings channel \n" \
+          "   `Hang Up` - Causes me to leave the Team Meetings channel \n" \
+          "   `Hold`   - Toggles whether I broadcast the microphone, or some spiffy on-hold music. \n\n" \
           " I'm hooked into the Blue Alliance for fun and profit. Ask me things like: \n" \
-          "   `who is <team number>` - I'll look up the team name. \n\n" \
+          "   `Who is <team number>` - I'll look up the team name. \n\n" \
           " There are a few system utilities:\n" \
           "   `reboot` - Causes my host computer to turn off and back on again. \n\n" \
           " Play around and have some fun! Talk to programming team if you want me to learn to do new things. \n" \
           " If I don't know what you're saying, I'll just say something that sounds like I know something about robotics. \n" \
+          " I'm getting better at guessing what you want. Just ask, and I will try! \n" \
 
 
 # What channel should the phone connect to?
