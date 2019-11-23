@@ -17,9 +17,6 @@ class CheerHandler():
 
         response = ""
 
-        if messageText.startswith('hello') or messageText.startswith('hi'):
-            response += random.choice(["Hello!", "Hello.", "Howdy!", "Good day to you!", "How's it going?", "Hi!", "Yo!", "Greetings!"])
-        
         # Handle Simple call/response cheers
         self.message = messageText
         response += self.callResponse("17", "36!")

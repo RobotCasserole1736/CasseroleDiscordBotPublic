@@ -9,6 +9,7 @@ from botGUIControl import *
 from cheerHandler import *
 from theBlueAlliance import *
 from revolabsFLXInterface import *
+from fuzzyResponseParser import *
 
 from markovChainGen.posify import *
 import markovify
@@ -49,6 +50,8 @@ class CasseroleDiscordBotClient(discord.Client):
         self.cheer = CheerHandler()
         #And becuase looking up stuff on the TBA is fun
         self.tbaInfo = TBAInfo()
+        #And because Alexa has utterly ruined people's expectations of what "interactive" means for computers
+        self.frp = FuzzyResponseParser()
 
         #self.audioSource = TestAudioSource()
         print("Creating audio Sources & Sinks...")
@@ -201,46 +204,11 @@ class CasseroleDiscordBotClient(discord.Client):
 
             cheerResponse = self.cheer.update(messageText)
             if(len(cheerResponse) > 0):
+                #This was a cheer, respond.
                 response = cheerResponse
-
-            # Handle phone commands
-            elif messageText.startswith('callinmentor'):
-                print("Connect Command from {}".format(message.author))
-                await self.voiceConnectMentor()
-                response = "Connected to Mentor Voice Channel!"
-
-            elif messageText.startswith('callin'):
-                print("Connect Command from {}".format(message.author))
-                await self.voiceConnectTeam()
-                response = "Connected to Team Voice Channel!"
-
-            elif messageText.startswith('hangup'):
-                print("Disconnect Command from {}".format(message.author))
-                await self.hangUp()
-                response = "Goodbye!"
-
-            elif messageText.startswith('hold'):
-                print("Hold State Change Command from {}".format(message.author))
-                self.holdRequest = not(self.holdRequest)
-                if(self.holdRequest):
-                    response = "Holding. Enjoy the music!"
-                else:
-                    response = "Microphones live!"
-
-            # Handle various system commands
-            elif messageText.startswith('help'):
-                print("Help request {}".format(message.author))
-                response = helpStr.format(message.author)
-
-            elif messageText.startswith('reboot'):
-                print("Reboot command from {}".format(message.author))
-                await self.voiceConnectTeam()
-                response = "Attempting to turn myself on and off again!"
-                reboot_requested = True
-
             else:
-                # Handle some lookup commands
-                results = re.search("\who is ([0-9]+)", messageText)
+                # Try to see if a regex match works
+                results = re.search(r"\who is ([0-9]+)", messageText)
                 if(results):
                     lookupStr = results.group(1).strip()
                     try:
@@ -250,12 +218,55 @@ class CasseroleDiscordBotClient(discord.Client):
                         print(e)
                         response = "Sorry, not sure who team '{}' is.".format(lookupStr)
                 else:
-                    #No other command written, so just print some technical phrases.
-                    response = self.markovModel.make_short_sentence(300)
-                    if(response is None):
-                        # Markov assembly failed. Well then. Ummm.
-                        response = "Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself."
-                    
+                    #Try a fuzzy match on other known commands
+
+                    fuzzyMatch = self.frp.parse(messageText)
+                    if fuzzyMatch == self.frp.CALLIN_MENTORS_REQUESTED:
+                        print("Connect Command from {}".format(message.author))
+                        await self.voiceConnectMentor()
+                        response = "Connected to Mentor Voice Channel!"
+
+                    elif fuzzyMatch == self.frp.CALLIN_TEAM_REQUESTED:
+                        print("Connect Command from {}".format(message.author))
+                        await self.voiceConnectTeam()
+                        response = "Connected to Team Voice Channel!"
+
+                    elif fuzzyMatch == self.frp.HANG_UP_REQUESTED:
+                        print("Disconnect Command from {}".format(message.author))
+                        await self.hangUp()
+                        response = "Goodbye!"
+
+                    elif fuzzyMatch == self.frp.HOLD_REQUESTED:
+                        print("Hold State Change Command from {}".format(message.author))
+                        self.holdRequest = not(self.holdRequest)
+                        if(self.holdRequest):
+                            response = "Holding. Enjoy the music!"
+                        else:
+                            response = "Microphones live!"
+
+                    # Handle various system commands
+                    elif fuzzyMatch == self.frp.HELP_REQUESTED:
+                        print("Help request {}".format(message.author))
+                        response = helpStr.format(message.author)
+
+                    elif fuzzyMatch == self.frp.REBOOT_REQUESTED:
+                        print("Reboot command from {}".format(message.author))
+                        await self.voiceConnectTeam()
+                        response = "Attempting to turn myself on and off again! Goodbye world..."
+                        reboot_requested = True
+
+                    # Handle Pleasantries
+                    elif fuzzyMatch == self.frp.GREETING:
+                        response = random.choice(["Hello!", "Hello.", "Howdy!", "Good day to you!", "How's it going?", "Hi!", "Yo!", "Greetings!"])
+
+                    else:
+                        #Unrecognized message. Flail about using chief delphi to generate a maybe reasonable response.
+                        response = "Ummmm... " + self.markovModel.make_short_sentence(300)
+
+                        if(response is None):
+                            #Even chief delphi has failed us. Give up totally.
+                            response = "Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself."
+                        
             await message.channel.send(response)
 
             self.systemRebootRequested = reboot_requested

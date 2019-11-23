@@ -11,38 +11,43 @@ class FuzzyResponseParser():
     discardStrings = ["can you", "please", "will you", "I need a", "just", "would you", "pretty please"]
 
     # Fuzzy Match commands
-    callinCommandMentors = ["Call in to mentor voice channel", "Start mentor voice call", "Call mentors", "callinMentor"]
-    callinCommandTeam = ["Call in to team voice channel", "Start team voice call", "Call team", "Call in", "Team call", "callin", "callinTeam"]
+    callinCommandMentors = ["Call in to mentor voice channel", "Start mentor voice call", "Call mentors", "callinMentor", "Call the mentors"]
+    callinCommandTeam = ["Call in to team voice channel", "Start team voice call", "Call team", "Call in", "Team call", "callin", "callinTeam", "Call the team"]
     holdCommands = ["Hold", "silence the line", "Apply the cone of silence"]
     hangUpCommands = ["Hang Up", "hangup", "say goodbye", "end call"]
     helpCommands = ["Help", "What do I do", "How do I"]
     rebootCommands = ["Restart", "reboot", "turn on and off again"]
     greetings = ["hello", "hi", "how are you", "how ya doin", "greetings", "salutations"]
 
-    fuzzyMatchDict = {"Call-In Mentors":callinCommandMentors,
-                      "Call-In Team":callinCommandTeam,
-                      "Hold":holdCommands,
-                      "Hang Up":hangUpCommands,
-                      "Help":helpCommands,
-                      "Reboot":rebootCommands,
-                      "Greeting":greetings
+
+    CALLIN_MENTORS_REQUESTED = 1
+    CALLIN_TEAM_REQUESTED    = 2
+    HOLD_REQUESTED           = 2
+    HANG_UP_REQUESTED        = 4
+    HELP_REQUESTED           = 5
+    REBOOT_REQUESTED         = 6
+    GREETING                 = 7
+
+    fuzzyMatchDict = {CALLIN_MENTORS_REQUESTED:callinCommandMentors,
+                      CALLIN_TEAM_REQUESTED   :callinCommandTeam,
+                      HOLD_REQUESTED          :holdCommands,
+                      HANG_UP_REQUESTED       :hangUpCommands,
+                      HELP_REQUESTED          :helpCommands,
+                      REBOOT_REQUESTED        :rebootCommands,
+                      GREETING                :greetings
                      }
 
-    # Regex Match Lookup
-    whoIsLookup =  "\who is ([0-9]+)"
-
-    # Exact Match Lookup
+    niceNameMatchDict = {CALLIN_MENTORS_REQUESTED:"Call-In Mentors",
+                         CALLIN_TEAM_REQUESTED   :"Call-In Team",
+                         HOLD_REQUESTED          :"Hold",
+                         HANG_UP_REQUESTED       :"Hang Up",
+                         HELP_REQUESTED          :"Help",
+                         REBOOT_REQUESTED        :"Reboot",
+                         GREETING                :"Greeting"
+                        }
 
     # Default fallback response
     response = "Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself."
-
-    CALLIN_MENTORS_REQUESTED = 1
-    CALLIN_TEAM_REQUESTED = 2
-    HOLD_REQUESTED = 2
-    HANG_UP_REQUESTED = 4
-    REBOOT_REQUESTED = 5
-
-
 
 
     def __init__(self):
@@ -70,9 +75,12 @@ class FuzzyResponseParser():
         bestPct = self.results[bestGuess]
         if(bestPct < 15.0):
             bestGuess = None
-        print(bestPct)
-        print(bestGuess)
-        print("======================")
+            msg = "FuzzyParse: Unknown input string"
+        else:
+            msg = "FuzzyParse: Resolved input string to {} with {}%% certanty".format(self.niceNameMatchDict[bestGuess], bestPct)
+
+        print(msg)
+        return(bestGuess)
 
     def parse(self, inputString):
         # Clean up the querey
@@ -80,7 +88,7 @@ class FuzzyResponseParser():
             inputString = inputString.replace(discardString, "")
 
         inputString = inputString.strip()
-        self.fuzzyParse(inputString)
+        return self.fuzzyParse(inputString)
 
 
 if __name__ == "__main__":
@@ -92,4 +100,4 @@ if __name__ == "__main__":
 
     while(True):
         inString = input(">")
-        testObj.parse(inString)
+        print(testObj.parse(inString))
