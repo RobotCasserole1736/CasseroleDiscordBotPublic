@@ -259,6 +259,11 @@ class CasseroleDiscordBotClient(discord.Client):
                     # Handle Pleasantries
                     elif fuzzyMatch == self.frp.GREETING:
                         response = random.choice(["Hello!", "Hello.", "Howdy!", "Good day to you!", "How's it going?", "Hi!", "Yo!", "Greetings!"])
+                    
+                    #Print out our facebook link
+                    elif fuzzyMatch == self.frp.1736_FACEBOOK:
+                        print("Facebook command from {}".format(message.author))
+                        response = "Okay, here you go \n https://www.facebook.com/FRCteam1736/"
 
                     else:
                         #Unrecognized message. Flail about using chief delphi to generate a maybe reasonable response.
