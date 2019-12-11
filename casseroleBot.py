@@ -19,22 +19,20 @@ sys.path.append("..")
 import APIKeys
 
 
-helpStr = " Hi {}! I'm the Casserole Discord Bot! \n" \
-          " Be sure to @ mention me if you want to talk, or start your message with a `$`. \n" \
+helpStr = " ```Hi @{} ! I'm Casserole-Bot! :rusty2: \n" \
+          " Be sure to @ mention me if you want to talk, or start your message with a **$**. \n" \
           " I know a few cheers which I'll respond to. \n" \
           " I also function as a conference phone. Mostly \n\n" \
           " The phone is controlled when you ask me to do the following: \n" \
-          "   `Call in Team` - Causes me to call into the Team Meetings channel \n" \
-          "   `Call in Mentors` - Causes me to call into the Mentor Meetings channel \n" \
-          "   `Hang Up` - Causes me to leave the Team Meetings channel \n" \
-          "   `Hold`   - Toggles whether I broadcast the microphone, or some spiffy on-hold music. \n\n" \
+          "   **Call in Team** - Causes me to call into the Team Meetings channel \n" \
+          "   **Call in Mentors** - Causes me to call into the Mentor Meetings channel \n" \
+          "   **Hang Up** - Causes me to leave the Team Meetings channel \n" \
+          "   **Hold**   - Toggles whether I broadcast the microphone, or some spiffy on-hold music. \n\n" \
           " I'm hooked into the Blue Alliance for fun and profit. Ask me things like: \n" \
-          "   `Who is <team number>` - I'll look up the team name. \n\n" \
+          "   **Who is <team number>** - I'll look up the team name. \n\n" \
           " There are a few system utilities:\n" \
-          "   `reboot` - Causes my host computer to turn off and back on again. \n\n" \
-          " Play around and have some fun! Talk to programming team if you want me to learn to do new things. \n" \
-          " If I don't know what you're saying, I'll just say something that sounds like I know something about robotics. \n" \
-          " I'm getting better at guessing what you want. Just ask, and I will try! \n" \
+          "   **reboot** - Causes my host computer to turn off and back on again. \n\n" \
+          " Play around and have some fun! Talk to programming team if you want me to learn to do new things, or if you need help with me.``` \n" \
 
 
 # What channel should the phone connect to?
@@ -261,18 +259,22 @@ class CasseroleDiscordBotClient(discord.Client):
                         response = random.choice(["Hello!", "Hello.", "Howdy!", "Good day to you!", "How's it going?", "Hi!", "Yo!", "Greetings!"])
                     
                     #Print out our facebook link
-                    elif fuzzyMatch == self.frp.1736_FACEBOOK:
-                        print("Facebook command from {}".format(message.author))
-                        response = "Okay, here you go \n https://www.facebook.com/FRCteam1736/"
 
                     else:
-                        #Unrecognized message. Flail about using chief delphi to generate a maybe reasonable response.
-                        response = "Ummmm... " + self.markovModel.make_short_sentence(300)
 
-                        if(response is None):
-                            #Even chief delphi has failed us. Give up totally.
-                            response = "Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself."
-                        
+                        if("social media" in messageText):
+                            print("Social Media command from {}".format(message.author))
+                            response = "Here you go! \nhttps://www.facebook.com/FRCteam1736/ \nhttps://www.thebluealliance.com/team/1736 \nhttps://www.facebook.com/FRCteam1736/ \nhttps://twitter.com/frc1736 \nhttps://www.youtube.com/channel/UCkyFQe46R61o5StqkTYDwdg \nhttps://www.instagram.com/frc1736/"
+                            # Return the link to the facebook page
+                            
+                        else:
+                            #Unrecognized message. Flail about using chief delphi to generate a maybe reasonable response.
+                            response = "Ummmm... " + self.markovModel.make_short_sentence(300)
+
+                            if(response is None):
+                                #Even chief delphi has failed us. Give up totally.
+                                response = "Did you ever hear the tragedy of Darth Plagueis The Wise? I thought not. It's not a story the Jedi would tell you. It's a Sith legend. Darth Plagueis was a Dark Lord of the Sith, so powerful and so wise he could use the Force to influence the midichlorians to create life… He had such a knowledge of the dark side that he could even keep the ones he cared about from dying. The dark side of the Force is a pathway to many abilities some consider to be unnatural. He became so powerful… the only thing he was afraid of was losing his power, which eventually, of course, he did. Unfortunately, he taught his apprentice everything he knew, then his apprentice killed him in his sleep. Ironic. He could save others from death, but not himself."
+                            
             await message.channel.send(response)
 
             self.systemRebootRequested = reboot_requested
