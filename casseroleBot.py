@@ -19,19 +19,19 @@ sys.path.append("..")
 import APIKeys
 
 
-helpStr = " **Hi {}! I'm the Casserole Discord Bot!** \n" \
+helpStr = " **Hi {}! I'm the Casserole Discord Bot!** :rusty2: \n" \
           " >>> Be sure to @ mention me if you want to talk, or start your message with a `$`. \n" \
-          " I know a few cheers which I'll respond to. \n" \
-          " I also function as a conference phone. Mostly \n\n" \
+          " I know a few cheers which I'll respond to. :Woodieemoji: \n" \
+          " I also function as a conference phone, mostly :telephone: \n\n" \
           " The phone is controlled when you ask me to do the following: \n" \
-          "   **Call in Team** - Causes me to call into the Team Meetings channel \n" \
-          "   **Call in Mentors** - Causes me to call into the Mentor Meetings channel \n" \
-          "   **Hang Up** - Causes me to leave the Team Meetings channel \n" \
-          "   **Hold**   - Toggles whether I broadcast the microphone, or some spiffy on-hold music. \n\n" \
+          "   `Call in Team` - Causes me to call into the Team Meetings channel \n" \
+          "   `Call in Mentors` - Causes me to call into the Mentor Meetings channel \n" \
+          "   `Hang Up` - Causes me to leave the Team Meetings channel \n" \
+          "   `Hold`   - Toggles whether I broadcast the microphone, or some spiffy on-hold music. \n\n" \
           " I'm hooked into the Blue Alliance for fun and profit. Ask me things like: \n" \
-          "   **Who is <team number>** - I'll look up the team name. \n\n" \
+          "   `Who is <team number>` - I'll look up the team name. \n\n" \
           " There are a few system utilities:\n" \
-          "   **reboot** - Causes my host computer to turn off and back on again. \n\n" \
+          "   `reboot` - Causes my host computer to turn off and back on again. \n\n" \
           " Play around and have some fun! Talk to programming team if you want me to learn to do new things, or if you need help with me.``` \n" \
 
 
