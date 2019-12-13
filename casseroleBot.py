@@ -19,8 +19,8 @@ sys.path.append("..")
 import APIKeys
 
 
-helpStr = " ```Hi @{} ! I'm Casserole-Bot! :rusty2: \n" \
-          " Be sure to @ mention me if you want to talk, or start your message with a **$**. \n" \
+helpStr = " **Hi {}! I'm the Casserole Discord Bot!** \n" \
+          " >>> Be sure to @ mention me if you want to talk, or start your message with a `$`. \n" \
           " I know a few cheers which I'll respond to. \n" \
           " I also function as a conference phone. Mostly \n\n" \
           " The phone is controlled when you ask me to do the following: \n" \
