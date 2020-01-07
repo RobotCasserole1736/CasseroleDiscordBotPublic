@@ -32,7 +32,7 @@ helpStr = " **Hi {}! I'm the Casserole Discord Bot!** :rusty2: \n" \
           "   `Who is <team number>` - I'll look up the team name. \n\n" \
           " There are a few system utilities:\n" \
           "   `reboot` - Causes my host computer to turn off and back on again. \n\n" \
-          " Play around and have some fun! Talk to programming team if you want me to learn to do new things, or if you need help with me.``` \n" \
+          " Play around and have some fun! Talk to programming team if you want me to learn to do new things, or if you need help with me. \n" \
 
 
 # What channel should the phone connect to?
