@@ -2,7 +2,7 @@
 
 Work In Process
 
-![Casserole](/casserole.jpeg)
+![Casserole](/casserole.jpg)
 
 This repo contains source code and utilities for the teleconference phone hardware, which is utilized by a Discord bot to act like a conference room phone.
 
